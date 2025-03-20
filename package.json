@@ -1,0 +1,16 @@
+{
+  "name": "uonline",
+  "version": "1.0.0",
+  "description": "RL Online Checker",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.11.0"
+  }
+}
+
