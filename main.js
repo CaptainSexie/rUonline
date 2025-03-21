@@ -1,8 +1,5 @@
 const { Client, GatewayIntentBits, Events, SlashCommandBuilder, REST, Routes } = require('discord.js');
-
-const CHANNEL_ID = '1351370100577538121';
-const ROLE_NAME = 'Playing Ball';
-const CHECK_INTERVAL = 300000; // 5 minutes in milliseconds
+const config = require('./config.json');
 
 const client = new Client({
     intents: [
@@ -14,13 +11,13 @@ const client = new Client({
 });
 
 async function updateRole(member, shouldHaveRole) {
-    let role = member.guild.roles.cache.find(r => r.name === ROLE_NAME);
+    let role = member.guild.roles.cache.find(r => r.name === config.roleName);
     if (!role) {
-        role = await member.guild.roles.create({ name: ROLE_NAME });
+        role = await member.guild.roles.create({ name: config.roleName });
     }
 
     const hasRole = member.roles.cache.has(role.id);
-    const logChannel = client.channels.cache.get(CHANNEL_ID);
+    const logChannel = client.channels.cache.get(config.channelId);
 
     if (shouldHaveRole && !hasRole) {
         await member.roles.add(role);
@@ -40,7 +37,7 @@ function isPlayingRocketLeague(member) {
 client.once(Events.ClientReady, () => {
     console.log(`Bot is ready! Logged in as ${client.user.tag}`);
     checkAllMembers();
-    setInterval(checkAllMembers, CHECK_INTERVAL);
+    setInterval(checkAllMembers, config.checkInterval);
 });
 
 client.on(Events.PresenceUpdate, async (oldPresence, newPresence) => {
@@ -93,6 +90,6 @@ async function deployCommands(clientId, guildId) {
     }
 }
 
-client.login('MTM1MTM2MzMyMTUwNDMzNzkyMA.G5blwT.dXhjK424xgPP23IusTkrgNw3poNhb3--0_bw-4').then(() => {
-    deployCommands('1351363321504337920', '355895791451373578');
+client.login(config.token).then(() => {
+    deployCommands(config.clientId, config.guildId);
 });
